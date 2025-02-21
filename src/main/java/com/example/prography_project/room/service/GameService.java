@@ -11,20 +11,20 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class GameService {
 
     private final RoomRepository roomRepository;
     private final UserRoomRepository userRoomRepository;
 
-    @Transactional
-    public void endGame(Long roomId) {
+    public void endGame(int roomId) {
         Room room = roomRepository.findById(roomId).orElse(null);
         if (room != null && room.getStatus() == RoomStatus.PROGRESS) {
             room.setStatus(RoomStatus.FINISH);
             roomRepository.save(room);
 
             // 유저-방 관계 삭제
-            userRoomRepository.deleteByRoomId(room.getId());
+            userRoomRepository.deleteByRoomId(roomId);
         }
     }
 }

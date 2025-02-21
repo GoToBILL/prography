@@ -34,11 +34,11 @@ class UserServiceTest {
     void 오름차순으로_잘_유저리스트를_뽑아주느냐() {
         // Given: fakerId 순서대로 저장 (정렬 후 저장)
         List<User> users = Arrays.asList(
-                new User(3L, "Charlie", "charlie@example.com"),
-                new User(1L, "Alice", "alice@example.com"),
-                new User(5L, "Eve", "eve@example.com"),
-                new User(4L, "David", "david@example.com"),
-                new User(2L, "Bob", "bob@example.com")
+                new User(3, "Charlie", "charlie@example.com"),
+                new User(1, "Alice", "alice@example.com"),
+                new User(5, "Eve", "eve@example.com"),
+                new User(4, "David", "david@example.com"),
+                new User(2, "Bob", "bob@example.com")
         );
         users.get(0).setStatus(UserStatus.ACTIVE);
         users.get(1).setStatus(UserStatus.ACTIVE);

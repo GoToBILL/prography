@@ -4,13 +4,13 @@ import lombok.Getter;
 
 @Getter
 public class RoomResponseDto {
-    private final Long id;
+    private final int id;
     private final String title;
-    private final Long hostId;
+    private final int hostId;
     private final String roomType;
     private final String status;
 
-    public RoomResponseDto(Long id, String title, Long hostId, String roomType, String status) {
+    public RoomResponseDto(int id, String title, int hostId, String roomType, String status) {
         this.id = id;
         this.title = title;
         this.hostId = hostId;

@@ -8,12 +8,12 @@ import java.util.stream.Collectors;
 
 @Getter
 public class RoomListResponseDto {
-    private final long totalElements;
+    private final int totalElements;
     private final int totalPages;
     private final List<RoomResponseDto> roomList;
 
     public RoomListResponseDto(long totalElements, int totalPages, List<RoomResponseDto> roomList) {
-        this.totalElements = totalElements;
+        this.totalElements = (int) totalElements;
         this.totalPages = totalPages;
         this.roomList = roomList;
     }

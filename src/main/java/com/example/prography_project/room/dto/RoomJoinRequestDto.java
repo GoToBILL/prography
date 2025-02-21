@@ -7,5 +7,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RoomJoinRequestDto {
-    private Long userId;
+    private int userId;
 }

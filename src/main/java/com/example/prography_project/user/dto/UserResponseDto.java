@@ -8,8 +8,8 @@ import java.time.format.DateTimeFormatter;
 
 @Getter
 public class UserResponseDto {
-    private Long id;
-    private Long fakerId;
+    private int id;
+    private int fakerId;
     private String name;
     private String email;
     private String status;

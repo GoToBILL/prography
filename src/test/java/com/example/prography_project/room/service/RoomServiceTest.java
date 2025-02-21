@@ -14,7 +14,7 @@ import com.example.prography_project.user.repository.UserRepository;
 import com.example.prography_project.useroom.domain.TeamType;
 import com.example.prography_project.useroom.domain.entity.UserRoom;
 import com.example.prography_project.useroom.repository.UserRoomRepository;
-import com.example.prography_project.team.dto.TeamChangeRequestDto;
+import com.example.prography_project.room.dto.TeamChangeRequestDto;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -73,7 +73,7 @@ class RoomServiceTest {
         roomService.joinRoom(testRoom.getId(), new RoomJoinRequestDto(testUser.getId()));
 
         // 새로운 활성 유저 생성 및 저장
-        newUser = new User(2L, "새로운 유저", "newuser@example.com");
+        newUser = new User(2, "새로운 유저", "newuser@example.com");
         newUser.setStatus(UserStatus.ACTIVE);
         userRepository.save(newUser);
 
@@ -81,11 +81,11 @@ class RoomServiceTest {
         roomService.joinRoom(testRoom.getId(), new RoomJoinRequestDto(newUser.getId()));
 
         // 비활성 유저 생성 및 저장
-        inactiveUser = new User(3L, "비활성 유저", "inactiveuser@example.com");
+        inactiveUser = new User(3, "비활성 유저", "inactiveuser@example.com");
         inactiveUser.setStatus(UserStatus.NON_ACTIVE);
         userRepository.save(inactiveUser);
 
-        new2User = new User(4L, "새로운 유저2", "asd@asd");
+        new2User = new User(4, "새로운 유저2", "asd@asd");
         new2User.setStatus(UserStatus.ACTIVE);
         userRepository.save(new2User);
     }
@@ -94,7 +94,7 @@ class RoomServiceTest {
     @Test
     void 유저가_존재하지_않으면_방_생성_실패() {
         // given
-        RoomCreateRequestDto requestDto = new RoomCreateRequestDto(9999L, "테스트 방", "SINGLE"); // 존재하지 않는 ID
+        RoomCreateRequestDto requestDto = new RoomCreateRequestDto(9999, "테스트 방", "SINGLE"); // 존재하지 않는 ID
 
         // when & then
         assertThrows(BaseException.class, () -> roomService.createRoom(requestDto));
@@ -150,7 +150,7 @@ class RoomServiceTest {
     @Test
     void 존재하지_않는_방을_조회하면_예외_발생() {
         // given
-        Long nonExistentRoomId = 9999L;
+        int nonExistentRoomId = 9999;
 
         // when & then
         assertThrows(BaseException.class, () -> roomService.getRoomById(nonExistentRoomId));
@@ -164,7 +164,7 @@ class RoomServiceTest {
         roomRepository.save(testRoom);
         userRoomRepository.save(testUserRoom);
 
-        User newUser = new User(2L, "새로운 유저", "newuser@example.com");
+        User newUser = new User(2, "새로운 유저", "newuser@example.com");
         newUser.setStatus(UserStatus.ACTIVE);
         userRepository.save(newUser);
 
@@ -182,7 +182,7 @@ class RoomServiceTest {
     void 존재하지_않는_방에_참가하면_예외_발생() {
         // given
         RoomJoinRequestDto requestDto = new RoomJoinRequestDto(testUser.getId());
-        Long nonExistentRoomId = 9999L;
+        int nonExistentRoomId = 9999;
 
         // when & then
         assertThrows(BaseException.class, () -> roomService.joinRoom(nonExistentRoomId, requestDto));
@@ -217,9 +217,9 @@ class RoomServiceTest {
     @Test
     void 두_명의_방장이_각각_방을_개설했고_유저가_한_방에_참여한_상태에서_다른_방에_참가하면_예외_발생() {
         // given
-        User host1 = new User(1L, "방장1", "host1@example.com");
-        User host2 = new User(2L, "방장2", "host2@example.com");
-        User participant = new User(3L, "참여자", "participant@example.com");
+        User host1 = new User(1, "방장1", "host1@example.com");
+        User host2 = new User(2, "방장2", "host2@example.com");
+        User participant = new User(3, "참여자", "participant@example.com");
 
         host1.setStatus(UserStatus.ACTIVE);
         host2.setStatus(UserStatus.ACTIVE);
@@ -262,7 +262,7 @@ class RoomServiceTest {
     void 존재하지_않는_방에서_나가면_예외_발생() {
         // given
         RoomLeaveRequestDto requestDto = new RoomLeaveRequestDto(testUser.getId());
-        Long nonExistentRoomId = 9999L;
+        int nonExistentRoomId = 9999;
 
         // when & then
         assertThrows(BaseException.class, () -> roomService.leaveRoom(nonExistentRoomId, requestDto));
@@ -358,7 +358,7 @@ class RoomServiceTest {
     @Test
     void 새로운_DOUBLE_방에서_팀을_변경하면_정상적으로_반영됨() {
         // given
-        User additionalUser = new User(5L, "새로운 유저2", "asd@asd");
+        User additionalUser = new User(5, "새로운 유저2", "asd@asd");
         additionalUser.setStatus(UserStatus.ACTIVE);
         userRepository.save(additionalUser);
 
@@ -386,7 +386,7 @@ class RoomServiceTest {
     void 존재하지_않는_방에서_팀_변경을_시도하면_예외_발생() {
         // given
         TeamChangeRequestDto requestDto = new TeamChangeRequestDto(newUser.getId());
-        Long nonExistentRoomId = 9999L;
+        int nonExistentRoomId = 9999;
 
         // when & then
         assertThrows(BaseException.class, () -> roomService.changeTeam(nonExistentRoomId, requestDto));
@@ -395,7 +395,7 @@ class RoomServiceTest {
     @Test
     void 존재하지_않는_유저가_팀_변경을_시도하면_예외_발생() {
         // given
-        TeamChangeRequestDto requestDto = new TeamChangeRequestDto(9999L); // 존재하지 않는 유저 ID
+        TeamChangeRequestDto requestDto = new TeamChangeRequestDto(9999); // 존재하지 않는 유저 ID
 
         // when & then
         assertThrows(BaseException.class, () -> roomService.changeTeam(testRoom.getId(), requestDto));
@@ -404,7 +404,7 @@ class RoomServiceTest {
     @Test
     void 게임이_이미_진행중이면_팀을_변경할_수_없음() {
         // given
-        User additionalUser = new User(5L, "새로운 유저2", "asd@asd");
+        User additionalUser = new User(5, "새로운 유저2", "asd@asd");
         additionalUser.setStatus(UserStatus.ACTIVE);
         userRepository.save(additionalUser);
 

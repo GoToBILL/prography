@@ -28,7 +28,7 @@ public class FakerApiClient {
             JsonNode dataArray = root.get("data");
 
             for (JsonNode node : dataArray) {
-                User user = new User(node.get("id").asLong(),node.get("username").asText(), node.get("email").asText());
+                User user = new User(node.get("id").asInt(),node.get("username").asText(), node.get("email").asText());
                 users.add(user);
             }
         } catch (Exception e) {

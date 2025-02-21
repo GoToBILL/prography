@@ -3,7 +3,7 @@ package com.example.prography_project.room.controller;
 import com.example.prography_project.common.response.ApiResponse;
 import com.example.prography_project.room.dto.*;
 import com.example.prography_project.room.service.RoomService;
-import com.example.prography_project.team.dto.TeamChangeRequestDto;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,23 +27,23 @@ public class RoomController {
     }
 
     @GetMapping("/{roomId}")
-    public ApiResponse<RoomDetailResponseDto> getRoomDetail(@PathVariable Long roomId) {
+    public ApiResponse<RoomDetailResponseDto> getRoomDetail(@PathVariable int roomId) {
         return roomService.getRoomById(roomId);
     }
 
     @PostMapping("/attention/{roomId}")
-    public ApiResponse<Void> joinRoom(@PathVariable Long roomId, @RequestBody RoomJoinRequestDto requestDto) {
+    public ApiResponse<Void> joinRoom(@PathVariable int roomId, @RequestBody RoomJoinRequestDto requestDto) {
         return roomService.joinRoom(roomId, requestDto);
     }
 
     @PostMapping("/out/{roomId}")
-    public ApiResponse<Void> leaveRoom(@PathVariable Long roomId, @RequestBody RoomLeaveRequestDto requestDto) {
+    public ApiResponse<Void> leaveRoom(@PathVariable int roomId, @RequestBody RoomLeaveRequestDto requestDto) {
         return roomService.leaveRoom(roomId, requestDto);
     }
 
-    @PutMapping("/room/start/{roomId}")
+    @PutMapping("/start/{roomId}")
     public ApiResponse<Void> startGame(
-            @PathVariable Long roomId, @RequestBody RoomStartRequestDto requestDto) {
+            @PathVariable int roomId, @RequestBody RoomStartRequestDto requestDto) {
         return roomService.startGame(roomId, requestDto);
     }
 }

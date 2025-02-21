@@ -22,6 +22,7 @@ public enum ErrorMessage {
     ROOM_NOT_JOINABLE(BAD_REQUEST, "해당 방은 현재 참가할 수 없습니다."),
     ROOM_NOT_FULL(BAD_REQUEST, "방의 정원이 가득 차지 않았습니다."),
     ROOM_NOT_WAITING(BAD_REQUEST, "방이 대기 상태가 아닙니다."),
+    ROOM_NOT_OUT(BAD_REQUEST, "해당 방에서 나갈 수 없습니다."),
 
 
     // 게임 관련 에러

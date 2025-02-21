@@ -14,7 +14,6 @@ import com.example.prography_project.user.repository.UserRepository;
 import com.example.prography_project.useroom.domain.TeamType;
 import com.example.prography_project.useroom.domain.entity.UserRoom;
 import com.example.prography_project.useroom.repository.UserRoomRepository;
-import com.example.prography_project.team.dto.TeamChangeRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -25,6 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.event.TransactionalEventListener;
+import com.example.prography_project.room.dto.TeamChangeRequestDto;
 
 import java.util.List;
 import java.util.concurrent.Executors;
@@ -103,7 +103,7 @@ public class RoomService {
      * @param roomId 조회할 방 ID
      * @return 방 상세 정보 응답
      */
-    public ApiResponse<RoomDetailResponseDto> getRoomById(Long roomId) {
+    public ApiResponse<RoomDetailResponseDto> getRoomById(int roomId) {
         Room room = roomRepository.findById(roomId)
                 .orElseThrow(() -> new BaseException(ErrorMessage.ROOM_NOT_FOUND));
         return ApiResponse.success(RoomDetailResponseDto.from(room));
@@ -123,7 +123,7 @@ public class RoomService {
      * @param requestDto 참가할 유저 정보
      * @return 성공 시 200 응답
      */
-    public ApiResponse<Void> joinRoom(Long roomId, RoomJoinRequestDto requestDto) {
+    public ApiResponse<Void> joinRoom(int roomId, RoomJoinRequestDto requestDto) {
         Room room = roomRepository.findById(roomId)
                 .orElseThrow(() -> new BaseException(ErrorMessage.ROOM_NOT_FOUND));
 
@@ -142,14 +142,14 @@ public class RoomService {
             throw new BaseException(ErrorMessage.USER_ALREADY_IN_ROOM);
         }
 
-        long currentMemberCount = userRoomRepository.countByRoomId(room.getId());
+        long currentMemberCount = userRoomRepository.countByRoomId(roomId);
         long maxCapacity = room.getRoom_type().getMaxUserCount();
 
         if (currentMemberCount >= maxCapacity) {
             throw new BaseException(ErrorMessage.ROOM_FULL);
         }
 
-        List<UserRoom> members = userRoomRepository.findAllByRoomId(room.getId());
+        List<UserRoom> members = userRoomRepository.findAllByRoomId(roomId);
         long redTeamCount = members.stream().filter(member -> member.getTeam() == TeamType.RED).count();
 
         TeamType assignedTeam = (redTeamCount == maxCapacity / 2) ? TeamType.BLUE : TeamType.RED;
@@ -172,7 +172,7 @@ public class RoomService {
      * @param requestDto 나갈 유저 정보
      * @return 성공 시 200 응답
      */
-    public ApiResponse<Void> leaveRoom(Long roomId, RoomLeaveRequestDto requestDto) {
+    public ApiResponse<Void> leaveRoom(int roomId, RoomLeaveRequestDto requestDto) {
         Room room = roomRepository.findById(roomId)
                 .orElseThrow(() -> new BaseException(ErrorMessage.ROOM_NOT_FOUND));
 
@@ -183,7 +183,7 @@ public class RoomService {
             throw new BaseException(ErrorMessage.ROOM_NOT_JOINABLE);
         }
 
-        UserRoom userRoom = userRoomRepository.findByUserIdAndRoomId(user.getId(), room.getId())
+        UserRoom userRoom = userRoomRepository.findByUserIdAndRoomId(user.getId(), roomId)
                 .orElseThrow(() -> new BaseException(ErrorMessage.USER_NOT_IN_ROOM));
 
         if (room.getHost().getId().equals(user.getId())) {
@@ -210,7 +210,7 @@ public class RoomService {
      * @param requestDto 시작하려는 유저 정보
      * @return 성공 시 200 응답
      */
-    public ApiResponse<Void> startGame(Long roomId, RoomStartRequestDto requestDto) {
+    public ApiResponse<Void> startGame(int roomId, RoomStartRequestDto requestDto) {
         Room room = roomRepository.findById(roomId)
                 .orElseThrow(() -> new BaseException(ErrorMessage.ROOM_NOT_FOUND));
 
@@ -221,7 +221,7 @@ public class RoomService {
             throw new BaseException(ErrorMessage.USER_NOT_HOST);
         }
 
-        long currentMemberCount = userRoomRepository.countByRoomId(room.getId());
+        long currentMemberCount = userRoomRepository.countByRoomId(roomId);
         long maxCapacity = room.getRoom_type().getMaxUserCount();
 
         if (currentMemberCount < maxCapacity) {
@@ -240,7 +240,7 @@ public class RoomService {
 
         return ApiResponse.success();
     }
-    private void scheduleGameEnd(Long roomId) {
+    private void scheduleGameEnd(int roomId) {
         scheduler.schedule(() -> gameService.endGame(roomId), 1, TimeUnit.MINUTES);
     }
 
@@ -256,7 +256,7 @@ public class RoomService {
      * @param requestDto 변경할 유저 정보
      * @return 성공 시 200 응답
      */
-    public ApiResponse<Void> changeTeam(Long roomId, TeamChangeRequestDto requestDto) {
+    public ApiResponse<Void> changeTeam(int roomId, TeamChangeRequestDto requestDto) {
         Room room = roomRepository.findById(roomId)
                 .orElseThrow(() -> new BaseException(ErrorMessage.ROOM_NOT_FOUND));
 
@@ -267,16 +267,16 @@ public class RoomService {
             throw new BaseException(ErrorMessage.ROOM_NOT_WAITING);
         }
 
-        UserRoom userRoom = userRoomRepository.findByUserIdAndRoomId(user.getId(), room.getId())
+        UserRoom userRoom = userRoomRepository.findByUserIdAndRoomId(user.getId(), roomId)
                 .orElseThrow(() -> new BaseException(ErrorMessage.USER_NOT_IN_ROOM));
 
         TeamType currentTeam = userRoom.getTeam();
         TeamType newTeam = (currentTeam == TeamType.RED) ? TeamType.BLUE : TeamType.RED;
 
-        long currentTeamCount = userRoomRepository.countByRoomIdAndTeam(room.getId(), newTeam);
+        long newTeamCount = userRoomRepository.countByRoomIdAndTeam(roomId, newTeam);
         long maxTeamSize = room.getRoom_type().getMaxUserCount() / 2;
 
-        if (currentTeamCount >= maxTeamSize) {
+        if (newTeamCount >= maxTeamSize) {
             throw new BaseException(ErrorMessage.USER_NOT_CHANGE_TEAM);
         }
 

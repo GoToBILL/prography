@@ -1,4 +1,4 @@
-package com.example.prography_project.team.dto;
+package com.example.prography_project.room.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -8,5 +8,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TeamChangeRequestDto {
-    private Long userId;
+    private int userId;
 }

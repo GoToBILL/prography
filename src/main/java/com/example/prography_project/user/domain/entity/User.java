@@ -14,9 +14,9 @@ import lombok.NoArgsConstructor;
 public class User extends BaseTimeEntity {
     @Id @Column(name = "user_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
-    private Long fakerId;
+    private Integer fakerId;
 
     private String name;
 
@@ -25,7 +25,7 @@ public class User extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private UserStatus status;
 
-    public User(Long fakerId, String name, String email) {
+    public User(Integer fakerId, String name, String email) {
         this.fakerId = fakerId;
         this.name = name;
         this.email = email;

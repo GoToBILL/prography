@@ -8,5 +8,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RoomStartRequestDto {
-    private Long userId;
+    private int userId;
 }

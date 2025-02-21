@@ -6,9 +6,9 @@ import java.time.format.DateTimeFormatter;
 
 @Getter
 public class RoomDetailResponseDto {
-    private final Long id;
+    private final int id;
     private final String title;
-    private final Long hostId;
+    private final int hostId;
     private final String roomType;
     private final String status;
     private final String createdAt;

@@ -9,11 +9,11 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface UserRoomRepository extends JpaRepository<UserRoom, Long> {
-    boolean existsByUserId(Long userId);
-    long countByRoomId(Long id);
-    List<UserRoom> findAllByRoomId(Long id);
-    void deleteByRoomId(Long id);
-    Optional<UserRoom> findByUserIdAndRoomId(Long id, Long id1);
-    long countByRoomIdAndTeam(Long id, TeamType newTeam);
+public interface UserRoomRepository extends JpaRepository<UserRoom, Integer> {
+    boolean existsByUserId(Integer userId);
+    long countByRoomId(Integer id);
+    List<UserRoom> findAllByRoomId(Integer id);
+    void deleteByRoomId(Integer id);
+    Optional<UserRoom> findByUserIdAndRoomId(Integer id, Integer id1);
+    long countByRoomIdAndTeam(Integer id, TeamType newTeam);
 }

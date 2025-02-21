@@ -34,7 +34,7 @@ public class InitService {
         users.sort(Comparator.comparing(User::getFakerId));
 
         for (User user : users) {
-            Long fakerId = user.getFakerId();
+            int fakerId = user.getFakerId();
 
             if (fakerId <= 30) {
                 user.setStatus(UserStatus.ACTIVE);

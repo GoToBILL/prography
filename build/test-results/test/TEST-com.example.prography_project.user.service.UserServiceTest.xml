@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.example.prography_project.user.service.UserServiceTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2025-02-21T06:18:39" hostname="jubyeongjuui-MacBookAir.local" time="0.018">
-  <properties/>
-  <testcase name="오름차순으로_잘_유저리스트를_뽑아주느냐()" classname="com.example.prography_project.user.service.UserServiceTest" time="0.018"/>
-  <system-out><![CDATA[2025-02-21T15:18:39.258+09:00  INFO 58804 --- [    Test worker] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [com.example.prography_project.user.service.UserServiceTest]: UserServiceTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-2025-02-21T15:18:39.266+09:00  INFO 58804 --- [    Test worker] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.example.prography_project.PrographyProjectApplication for test class com.example.prography_project.user.service.UserServiceTest
-]]></system-out>
-  <system-err><![CDATA[]]></system-err>
-</testsuite>
